@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dóri Szuper Speciális Adócsaló Kalkulátora</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            padding: 0;
+            background-color: #f9f9f9;
+        }
+        .calculator {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            margin-top: 5px;
+        }
+        button {
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #e9ecef;
+            border-radius: 4px;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="calculator">
+        <h1>Árajánlat Kalkulátor</h1>
+        <form id="calculator-form">
+            <div class="form-group">
+                <label for="hours">Hány órát kell ott lennem?</label>
+                <select id="hours" name="hours" required>
+                    <option value="4">4 óra</option>
+                    <option value="5">5 óra</option>
+                    <option value="6">6 óra</option>
+                    <option value="7">7 óra</option>
+                    <option value="8">8 óra</option>
+                    <option value="9">9 óra</option>
+                    <option value="10">10 óra</option>
+                    <option value="11">11 óra</option>
+                    <option value="12">12 óra</option>
+                    <option value="13">13 óra</option>
+                    <option value="14">14 óra</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="county">Fotózás helyszíne (megye)</label>
+                <select id="county" name="county" required>
+                    <option value="0">Budapest (0 km)</option>
+                    <option value="64500">Békés (Békéscsaba - 215 km)</option>
+                    <option value="69000">Hajdú-Bihar (Debrecen - 230 km)</option>
+                    <option value="42000">Heves (Eger - 140 km)</option>
+                    <option value="36000">Győr-Moson-Sopron (Győr - 120 km)</option>
+                    <option value="55800">Somogy (Kaposvár - 186 km)</option>
+                    <option value="25800">Bács-Kiskun (Kecskemét - 86 km)</option>
+                    <option value="54000">Borsod-Abaúj-Zemplén (Miskolc - 180 km)</option>
+                    <option value="73500">Szabolcs-Szatmár-Bereg (Nyíregyháza - 245 km)</option>
+                    <option value="60000">Baranya (Pécs - 200 km)</option>
+                    <option value="32700">Nógrád (Salgótarján - 109 km)</option>
+                    <option value="51000">Csongrád-Csanád (Szeged - 170 km)</option>
+                    <option value="19200">Fejér (Székesfehérvár - 64 km)</option>
+                    <option value="45000">Tolna (Szekszárd - 150 km)</option>
+                    <option value="30000">Jász-Nagykun-Szolnok (Szolnok - 100 km)</option>
+                    <option value="66000">Vas (Szombathely - 220 km)</option>
+                    <option value="18000">Komárom-Esztergom (Tatabánya - 60 km)</option>
+                    <option value="33000">Veszprém (Veszprém - 110 km)</option>
+                    <option value="66000">Zala (Zalaegerszeg - 220 km)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="creative">Kreatív fotózás időpontja</label>
+                <select id="creative" name="creative" required>
+                    <option value="0">Nem kérek</option>
+                    <option value="0">Aznap</option>
+                    <option value="30000">Külön alkalommal</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>
+                    <input type="checkbox" id="engagement" name="engagement"> Jegyes fotózás
+                </label>
+            </div>
+            <div class="form-group" id="accommodation-group" style="display: none;">
+                <label for="accommodation">Biztosít-e szállást a szolgáltatónak?</label>
+                <select id="accommodation" name="accommodation">
+                    <option value="0">Igen</option>
+                    <option value="15000">Nem</option>
+                </select>
+            </div>
+            <button type="button" onclick="calculatePrice()">Számítás</button>
+        </form>
+        <div id="result" class="result" style="display: none;">
+            Az ajánlott ár: <span id="price">0</span> Ft
+        </div>
+    </div>
+
+    <script>
+        function calculatePrice() {
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const county = parseInt(document.getElementById('county').value) || 0;
+            const creativeOption = parseInt(document.getElementById('creative').value) || 0;
+            const engagement = document.getElementById('engagement').checked ? 35000 : 0;
+            const accommodation = hours >= 12 ? parseInt(document.getElementById('accommodation').value) || 0 : 0;
+
+            // Óradíj kalkuláció a csökkenő óradíj alapján
+            let hourlyRate = 0;
+            if (hours >= 4 && hours <= 14) {
+                if (hours === 4) hourlyRate = 37500; // 150 000 / 4
+                else if (hours === 8) hourlyRate = 31250; // 250 000 / 8
+                else if (hours === 14) hourlyRate = 24286; // 340 000 / 14
+                else if (hours > 4 && hours < 8) hourlyRate = Math.round(37500 - ((hours - 4) * 1562.5));
+                else if (hours > 8 && hours < 14) hourlyRate = Math.round(31250 - ((hours - 8) * 1178.57));
+            }
+
+            // Kreatív fotózás külön napon felár
+            let creativeSurcharge = 0;
+            if (creativeOption === 30000) { // Külön alkalommal
+                if (hours >= 4 && hours <= 5) creativeSurcharge = 40000;
+                else if (hours >= 5 && hours <= 6) creativeSurcharge = 36000;
+                else if (hours >= 7 && hours <= 8) creativeSurcharge = 32000;
+                else if (hours >= 9 && hours <= 10) creativeSurcharge = 28000;
+                else if (hours > 10) creativeSurcharge = 25000;
+            }
+
+            // Összegzés
+            const total = Math.round((hours * hourlyRate) + county + creativeOption + engagement + creativeSurcharge + accommodation);
+
+            // Szállás mező megjelenítése
+            document.getElementById('accommodation-group').style.display = hours >= 12 ? 'block' : 'none';
+
+            // Eredmény megjelenítése
+            document.getElementById('price').textContent = total.toLocaleString('hu-HU');
+            document.getElementById('result').style.display = 'block';
+        }
+    </script>
+</body>
+</html>
