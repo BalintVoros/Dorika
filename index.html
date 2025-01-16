@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dóri Szuper Speciális Adócsaló Kalkulátora</title>
+    <title>Dóri Csaló Kalkulátor</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -33,6 +33,31 @@
             font-size: 16px;
             margin-top: 5px;
         }
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 8px;
+            background: #ddd;
+            border-radius: 5px;
+            outline: none;
+        }
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #007BFF;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+        input[type="range"]::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: #007BFF;
+            border-radius: 50%;
+            cursor: pointer;
+        }
         button {
             background-color: #007BFF;
             color: white;
@@ -50,50 +75,45 @@
             border-radius: 4px;
             font-size: 18px;
         }
+        #hour-value {
+            font-weight: bold;
+            display: inline-block;
+            margin-left: 10px;
+        }
     </style>
 </head>
 <body>
     <div class="calculator">
-        <h1>Dóri Szuper Speciális Adócsaló Kalkulátora</h1>
+        <h1>Dóri Csaló Kalkulátor</h1>
         <form id="calculator-form">
             <div class="form-group">
                 <label for="hours">Hány órát kell ott lennem?</label>
-                <select id="hours" name="hours" required>
-                    <option value="4">4 óra</option>
-                    <option value="5">5 óra</option>
-                    <option value="6">6 óra</option>
-                    <option value="7">7 óra</option>
-                    <option value="8">8 óra</option>
-                    <option value="9">9 óra</option>
-                    <option value="10">10 óra</option>
-                    <option value="11">11 óra</option>
-                    <option value="12">12 óra</option>
-                    <option value="13">13 óra</option>
-                    <option value="14">14 óra</option>
-                </select>
+                <input type="range" id="hours" name="hours" min="4" max="14" value="4" step="1" oninput="updateHourValue(); toggleAccommodation()">
+                <span id="hour-value">4</span> óra
             </div>
             <div class="form-group">
                 <label for="county">Fotózás helyszíne (megye)</label>
-                <select id="county" name="county" required>
-                    <option value="0">Budapest (0 km)</option>
-                    <option value="64500">Békés (Békéscsaba - 215 km)</option>
-                    <option value="69000">Hajdú-Bihar (Debrecen - 230 km)</option>
-                    <option value="42000">Heves (Eger - 140 km)</option>
-                    <option value="36000">Győr-Moson-Sopron (Győr - 120 km)</option>
-                    <option value="55800">Somogy (Kaposvár - 186 km)</option>
-                    <option value="25800">Bács-Kiskun (Kecskemét - 86 km)</option>
-                    <option value="54000">Borsod-Abaúj-Zemplén (Miskolc - 180 km)</option>
-                    <option value="73500">Szabolcs-Szatmár-Bereg (Nyíregyháza - 245 km)</option>
-                    <option value="60000">Baranya (Pécs - 200 km)</option>
-                    <option value="32700">Nógrád (Salgótarján - 109 km)</option>
-                    <option value="51000">Csongrád-Csanád (Szeged - 170 km)</option>
-                    <option value="19200">Fejér (Székesfehérvár - 64 km)</option>
-                    <option value="45000">Tolna (Szekszárd - 150 km)</option>
-                    <option value="30000">Jász-Nagykun-Szolnok (Szolnok - 100 km)</option>
-                    <option value="66000">Vas (Szombathely - 220 km)</option>
-                    <option value="18000">Komárom-Esztergom (Tatabánya - 60 km)</option>
-                    <option value="33000">Veszprém (Veszprém - 110 km)</option>
-                    <option value="66000">Zala (Zalaegerszeg - 220 km)</option>
+                <select id="county" name="county" required onchange="toggleAccommodation()">
+                    <option value="0">Budapest</option>
+                    <option value="64500">Békés</option>
+                    <option value="69000">Hajdú-Bihar</option>
+                    <option value="42000">Heves</option>
+                    <option value="36000">Győr-Moson-Sopron</option>
+                    <option value="55800">Somogy </option>
+                    <option value="25800">Bács-Kiskun</option>
+                    <option value="54000">Borsod-Abaúj-Zemplén</option>
+                    <option value="73500">Szabolcs-Szatmár-Bereg</option>
+                    <option value="60000">Baranya</option>
+                    <option value="32700">Nógrád</option>
+                    <option value="51000">Csongrád-Csanád</option>
+                    <option value="19200">Fejér</option>
+                    <option value="45000">Tolna</option>
+                    <option value="30000">Jász-Nagykun-Szolnok</option>
+                    <option value="66000">Vas</option>
+                    <option value="18000">Komárom-Esztergom</option>
+                    <option value="33000">Veszprém </option>
+                    <option value="66000">Zala</option>
+
                 </select>
             </div>
             <div class="form-group">
@@ -107,7 +127,6 @@
             <div class="form-group">
                 <label>
                     <input type="checkbox" id="engagement" name="engagement"> Jegyes fotózás
-                </label>
             </div>
             <div class="form-group" id="accommodation-group" style="display: none;">
                 <label for="accommodation">Biztosít-e szállást a szolgáltatónak?</label>
@@ -124,6 +143,19 @@
     </div>
 
     <script>
+        function updateHourValue() {
+            const hourSlider = document.getElementById('hours');
+            const hourValue = document.getElementById('hour-value');
+            hourValue.textContent = hourSlider.value;
+        }
+
+        function toggleAccommodation() {
+            const hours = parseInt(document.getElementById('hours').value) || 0;
+            const county = document.getElementById('county').value;
+            const accommodationGroup = document.getElementById('accommodation-group');
+            accommodationGroup.style.display = (hours >= 12 && county !== "0") ? 'block' : 'none';
+        }
+
         function calculatePrice() {
             const hours = parseInt(document.getElementById('hours').value) || 0;
             const county = parseInt(document.getElementById('county').value) || 0;
@@ -145,17 +177,13 @@
             let creativeSurcharge = 0;
             if (creativeOption === 30000) { // Külön alkalommal
                 if (hours >= 4 && hours <= 5) creativeSurcharge = 40000;
-                else if (hours >= 5 && hours <= 6) creativeSurcharge = 36000;
-                else if (hours >= 7 && hours <= 8) creativeSurcharge = 32000;
-                else if (hours >= 9 && hours <= 10) creativeSurcharge = 28000;
+                else if (hours >= 6 && hours <= 7) creativeSurcharge = 36000;
+                else if (hours >= 8 && hours <= 9) creativeSurcharge = 32000;
                 else if (hours > 10) creativeSurcharge = 25000;
             }
 
             // Összegzés
             const total = Math.round((hours * hourlyRate) + county + creativeOption + engagement + creativeSurcharge + accommodation);
-
-            // Szállás mező megjelenítése
-            document.getElementById('accommodation-group').style.display = hours >= 12 ? 'block' : 'none';
 
             // Eredmény megjelenítése
             document.getElementById('price').textContent = total.toLocaleString('hu-HU');
